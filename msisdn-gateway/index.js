@@ -278,6 +278,11 @@ app.post("/discover", function(req, res) {
 
   if (req.body.hasOwnProperty("msisdn") || moVerifier === null) {
     var msisdn = phone(req.body.msisdn);
+    if (msisdn.length === 2) {
+      msisdn = msisdn[0];
+    } else {
+      msisdn = null;
+    }
     if (msisdn === null && moVerifier !== null) {
       sendError(res, 400,
                 errors.INVALID_PARAMETERS, "Invalid MSISDN number.");
@@ -508,7 +513,7 @@ app.get("/sms/momt/nexmo_callback", function(req, res) {
   }
 
   var options = {
-    msisdn: phone('+' + req.query.msisdn),
+    msisdn: phone('+' + req.query.msisdn)[0],
     text: req.query.text
   };
 
@@ -523,7 +528,7 @@ app.get("/sms/momt/beepsend_callback", function(req, res) {
   }
 
   var options = {
-    msisdn: phone('+' + req.query.from),
+    msisdn: phone('+' + req.query.from)[0],
     text: req.query.message
   };
 

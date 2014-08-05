@@ -54,7 +54,7 @@ describe("SMS Gateway", function() {
       }).sendSMS;
 
 
-      sendSMS("+33123456789", "Body", function(err) {
+      sendSMS("+33623456789", "Body", function(err) {
         expect(requests).to.length(1);
         expect(requests[0].url).to.match(/beepsend/);
         done(err);
@@ -88,7 +88,7 @@ describe("SMS Gateway", function() {
       }).sendSMS;
 
 
-      sendSMS("+33123456789", "Body", function(err) {
+      sendSMS("+33623456789", "Body", function(err) {
         expect(numberOfTries).to.eql(3);
         done();
       });
@@ -148,14 +148,14 @@ describe("SMS Gateway", function() {
         apiSecret: "456",
         priority: 10
       });
-      gateway.sendSms("123456789", "Body", function(err, res) {
+      gateway.sendSms("0623456789", "Body", function(err, res) {
         expect(requests).to.length(1);
         expect(requests[0]).to.match(/^http:\/\/nexmo/);
         expect(requests[0]).to.match(/api_key=123/);
         expect(requests[0]).to.match(/api_secret=456/);
         expect(requests[0]).to.match(/from=Mozilla%40/);
         expect(requests[0]).to.match(/text=Body/);
-        expect(requests[0]).to.match(/to=123456789/);
+        expect(requests[0]).to.match(/to=0623456789/);
         done();
       });
     });
@@ -178,13 +178,13 @@ describe("SMS Gateway", function() {
         apiToken: "456",
         priority: 10
       });
-      gateway.sendSms("123456789", "Body", function(err, res) {
+      gateway.sendSms("0623456789", "Body", function(err, res) {
         expect(requests).to.length(1);
         expect(requests[0].url).to.match(/^http:\/\/beepsend/);
         expect(requests[0].url).to.match(/123$/);
         expect(requests[0].headers.Authorization).to.match(/Token 456/);
         expect(requests[0].form).to.eql({
-          to: "123456789",
+          to: "0623456789",
           message: "Body",
           from: "Mozilla"
         });
@@ -211,14 +211,14 @@ describe("SMS Gateway", function() {
         pwd: "456",
         priority: 10
       });
-      gateway.sendSms("+33123456789", "Body", function(err, res) {
+      gateway.sendSms("+33623456789", "Body", function(err, res) {
         expect(requests).to.length(1);
         expect(requests[0]).to.match(/^http:\/\/leonix/);
         expect(requests[0]).to.match(/service=20629/);
         expect(requests[0]).to.match(/login=123/);
         expect(requests[0]).to.match(/pwd=456/);
         expect(requests[0]).to.match(/source=Mozilla%40/);
-        expect(requests[0]).to.match(/number=0123456789/);
+        expect(requests[0]).to.match(/number=0623456789/);
         expect(requests[0]).to.match(/msg=Body/);
         done();
       });

@@ -326,7 +326,7 @@ describe("HTTP API exposed by the server", function() {
 
     it("should return the sms/mt flow if the MSISDN is configured.",
       function(done) {
-        jsonReq.send({msisdn: "+33123456789", "mcc": "555"}).expect(200).end(
+        jsonReq.send({msisdn: "+33623456789", "mcc": "555"}).expect(200).end(
           function(err, res) {
             if (err) throw err;
             expect(res.body).to.eql({
@@ -412,7 +412,7 @@ describe("HTTP API exposed by the server", function() {
     });
 
     it("should create the Hawk session.", function(done) {
-      jsonReq.send({msisdn: "+33123456789"}).expect(200).end(
+      jsonReq.send({msisdn: "+33623456789"}).expect(200).end(
         function(err, res) {
           expect(res.body.hasOwnProperty("msisdnSessionToken")).to.equal(true);
           expect(res.body.msisdnSessionToken).to.length(64);
@@ -432,7 +432,7 @@ describe("HTTP API exposed by the server", function() {
     });
 
     it("should clean the session.", function(done) {
-      jsonReq.send({msisdn: "+33123456789"}).expect(204).end(
+      jsonReq.send({msisdn: "+33623456789"}).expect(204).end(
         function(err, res, tokenId) {
           if (err) {
             throw err;
@@ -462,7 +462,7 @@ describe("HTTP API exposed by the server", function() {
     });
 
     it("should require a valid MSISDN number", function(done) {
-      jsonReq.send({msisdn: "0123456789"})
+      jsonReq.send({msisdn: "0623456789"})
         .expect(400)
         .expect('Content-Type', /json/)
         .end(function(err, res) {
@@ -480,7 +480,7 @@ describe("HTTP API exposed by the server", function() {
           message = msg;
           cb(null);
         });
-      jsonReq.send({msisdn: "+33123456789"}).expect(204).end(
+      jsonReq.send({msisdn: "+33623456789"}).expect(204).end(
         function(err, res) {
           if (err) throw err;
           sinon.assert.calledOnce(smsGateway.sendSMS);
@@ -498,7 +498,7 @@ describe("HTTP API exposed by the server", function() {
             cb(null);
           });
         jsonReq.send({
-          msisdn: "+33123456789",
+          msisdn: "+33623456789",
           shortVerificationCode: true
         }).expect(204).end(
           function(err, res) {
@@ -520,7 +520,7 @@ describe("HTTP API exposed by the server", function() {
             cb(null);
           });
          jsonReq.send({
-           msisdn: "+33123456789",
+           msisdn: "+33623456789",
            shortVerificationCode: false
          }).expect(204).end(
           function(err, res) {
@@ -538,12 +538,12 @@ describe("HTTP API exposed by the server", function() {
             cb(null);
           });
          jsonReq.send({
-           msisdn: "+33123456789"
+           msisdn: "+33623456789"
          }).expect(204).end(
           function(err, res) {
             if (err) throw err;
             buildJsonReq().send({
-              msisdn: "+33214365879"
+              msisdn: "+33614365879"
             }).expect(400).expect('Content-Type', /json/)
               .end(function(err, res) {
                 expectFormatedError(res.body, 400, errors.INVALID_PARAMETERS,
@@ -583,7 +583,7 @@ describe("HTTP API exposed by the server", function() {
 
     it("should always return a 200 even if the smsBody is not found.",
        function(done) {
-         jsonReq.query({msisdn: "33123456789", text: "wrong-smsBody"})
+         jsonReq.query({msisdn: "33623456789", text: "wrong-smsBody"})
            .expect(200).end(function(err, res) {
              if (err) throw err;
              sinon.assert.notCalled(smsGateway.sendSMS);
@@ -594,7 +594,7 @@ describe("HTTP API exposed by the server", function() {
     it("should not send a sms if another number try to register to session.",
        function(done) {
          jsonReq.query({
-           msisdn: "33123456789",
+           msisdn: "33623456789",
            text: "/sms/momt/verify " + hawkCredentials.id
          }).expect(200).end(function(err, res) {
            if (err) throw err;
@@ -614,7 +614,7 @@ describe("HTTP API exposed by the server", function() {
 
     it("should send a SMS with the code.", function(done) {
          jsonReq.query({
-           msisdn: "33123456789",
+           msisdn: "33623456789",
            text: "/sms/momt/verify " + hawkCredentials.id
          }).expect(200).end(function(err, res) {
            if (err) throw err;
@@ -623,7 +623,7 @@ describe("HTTP API exposed by the server", function() {
              if (err) throw err;
              expect(
                encrypt.decrypt(hawkCredentials.id, msisdn)
-             ).to.eql("+33123456789");
+             ).to.eql("+33623456789");
              done();
            });
          });
@@ -659,7 +659,7 @@ describe("HTTP API exposed by the server", function() {
     });
 
     it("should validate if the code is valid.", function(done) {
-      var msisdn = "+33123456789";
+      var msisdn = "+33623456789";
       storage.setCode(hawkHmacId, "123456", function(err) {
         if (err) throw err;
         storage.storeMSISDN(
@@ -723,7 +723,7 @@ describe("HTTP API exposed by the server", function() {
     });
 
     it("should setCertificateData.", function(done) {
-      var msisdn = "+33123456789";
+      var msisdn = "+33623456789";
       storage.setCode(hawkHmacId, "123456", function(err) {
         if (err) throw err;
         storage.storeMSISDN(
@@ -750,7 +750,7 @@ describe("HTTP API exposed by the server", function() {
 
     it("should prune volatileData when setting persistent ones.",
       function(done) {
-        var msisdn = "+33123456789";
+        var msisdn = "+33623456789";
         storage.setCode(hawkHmacId, "123456", function(err) {
           if (err) throw err;
           storage.storeMSISDN(
@@ -811,7 +811,7 @@ describe("HTTP API exposed by the server", function() {
     });
 
     it("should success with a registered MSISDN.", function(done) {
-      var msisdn = "+33123456789";
+      var msisdn = "+33623456789";
       var now = Date.now();
       storage.setCertificateData(hawkHmacId, {
         cipherMsisdn: encrypt.encrypt(hawkCredentials.id, msisdn),
